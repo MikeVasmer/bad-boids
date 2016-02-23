@@ -54,16 +54,16 @@ def update_boids(boids):
 axes_min, axes_max = -500, 1500
 number_of_frames, frame_delay = 50, 50
 
-def show_boids(axes_min,axes_max,number_of_frames,frame_delay):
-	figure=plt.figure()
-	axes=plt.axes(xlim=(axes_min,axes_max), ylim=(axes_min,axes_max))
-	scatter=axes.scatter(boids[0],boids[1])
+def simulate(axes_min, axes_max, number_of_frames, frame_delay, boids, show=True):
+	figure = plt.figure()
+	axes = plt.axes(xlim=(axes_min,axes_max), ylim=(axes_min,axes_max))
+	scatter = axes.scatter(boids[0],boids[1])
 	def animate(frame):
 	   update_boids(boids)
 	   scatter.set_offsets(zip(boids[0],boids[1]))
-	anim = animation.FuncAnimation(figure, animate,
-	                               frames=number_of_frames, interval=frame_delay)
-	plt.show()
+	anim = animation.FuncAnimation(figure, animate, frames=number_of_frames, interval=frame_delay)
+	if show:
+		plt.show()
 
 if __name__ == "__main__":
-    show_boids(axes_min,axes_max,number_of_frames,frame_delay)
+    simulate(axes_min,axes_max,number_of_frames,frame_delay,boids)
