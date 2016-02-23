@@ -51,9 +51,9 @@ def update_boids(boids):
 		xs[i]=xs[i]+xvs[i]
 		ys[i]=ys[i]+yvs[i]
 
-
+axes_min, axes_max = -500, 1500
 figure=plt.figure()
-axes=plt.axes(xlim=(-500,1500), ylim=(-500,1500))
+axes=plt.axes(xlim=(axes_min,axes_max), ylim=(axes_min,axes_max))
 scatter=axes.scatter(boids[0],boids[1])
 
 def animate(frame):
