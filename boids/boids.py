@@ -13,12 +13,12 @@ min_x_position, max_x_position = -450, 50
 min_y_position, max_y_position = 300, 600
 min_x_velocity, max_x_velocity = 0, 10
 min_y_velocity, max_y_velocity = -20, 20
-numberOfBirds = 50
+number_of_boids = 50
 
-boids_x=[random.uniform(min_x_position,max_x_position) for x in range(numberOfBirds)]
-boids_y=[random.uniform(min_y_position,max_y_position) for x in range(numberOfBirds)]
-boid_x_velocities=[random.uniform(min_x_velocity,max_x_velocity) for x in range(numberOfBirds)]
-boid_y_velocities=[random.uniform(min_y_velocity,max_y_velocity) for x in range(numberOfBirds)]
+boids_x=[random.uniform(min_x_position,max_x_position) for x in range(number_of_boids)]
+boids_y=[random.uniform(min_y_position,max_y_position) for x in range(number_of_boids)]
+boid_x_velocities=[random.uniform(min_x_velocity,max_x_velocity) for x in range(number_of_boids)]
+boid_y_velocities=[random.uniform(min_y_velocity,max_y_velocity) for x in range(number_of_boids)]
 boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
 
 def update_boids(boids):
@@ -52,6 +52,8 @@ def update_boids(boids):
 		ys[i]=ys[i]+yvs[i]
 
 axes_min, axes_max = -500, 1500
+number_of_frames, frame_delay = 50, 50
+
 figure=plt.figure()
 axes=plt.axes(xlim=(axes_min,axes_max), ylim=(axes_min,axes_max))
 scatter=axes.scatter(boids[0],boids[1])
@@ -60,9 +62,8 @@ def animate(frame):
    update_boids(boids)
    scatter.set_offsets(zip(boids[0],boids[1]))
 
-
 anim = animation.FuncAnimation(figure, animate,
-                               frames=50, interval=50)
+                               frames=number_of_frames, interval=frame_delay)
 
 if __name__ == "__main__":
     plt.show()
