@@ -3,18 +3,21 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 from mock import patch
 from nose.tools import assert_equal
-
+import yaml
+import os
+import inspect
 
 @patch("matplotlib.pyplot.axes")
 @patch("matplotlib.animation.FuncAnimation")
 def test_simulate(mock_FuncAnimation, mock_axes):
-    params = {"number_of_frames" : 40, "frame_delay" : 55, "axes_min" : -600, "axes_max" : 1600}
+    fixture_path = os.path.dirname(os.path.abspath(inspect.stack()[0][1])) + "/fixtures/test_params.yaml"
+    test_params = yaml.load(open(fixture_path))
     boids = ([0], [0], [0], [0])
-    simulate(params, boids, False)
+    simulate(test_params, boids, False)
     mock_axes.assert_called_with(
         xlim=(
-            params["axes_min"], params["axes_max"]), ylim=(
-            params["axes_min"], params["axes_max"]))
+            test_params["axes_min"], test_params["axes_max"]), ylim=(
+            test_params["axes_min"], test_params["axes_max"]))
     args = mock_FuncAnimation.call_args
-    assert_equal(args[1]['frames'], params["number_of_frames"])
-    assert_equal(args[1]['interval'], params["frame_delay"])
+    assert_equal(args[1]['frames'], test_params["number_of_frames"])
+    assert_equal(args[1]['interval'], test_params["frame_delay"])

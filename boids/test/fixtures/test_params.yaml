@@ -1,0 +1,4 @@
+number_of_frames: 40
+frame_delay: 55
+axes_min: -600
+axes_max: 1600
