@@ -6,7 +6,7 @@ import os
 from mock import call, patch
 
 @patch("random.uniform")
-def test_Boid(mock_random_uniform):
+def test_init(mock_random_uniform):
     test_params = yaml.load(open(os.path.join(os.path.dirname(__file__),'fixtures/test_params.yaml')))
     boid_limits = test_params["boid_limits"]
     test_boid = Boid(boid_limits)

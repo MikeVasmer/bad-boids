@@ -11,3 +11,4 @@ boid_limits:
     max_x_velocity: 50
     min_y_velocity: -10
     max_y_velocity: 2
+number_of_boids: 47

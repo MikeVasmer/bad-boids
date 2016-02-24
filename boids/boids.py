@@ -27,14 +27,14 @@ class Flock(object):
             boid = Boid(boid_limits)
             self.boids.append(boid)
 
-    def boids_to_array(self):
-        boids_array = boids = ([], [], [], [])
+    def boids_to_tuple(self):
+        boids_tuple = boids = ([], [], [], [])
         for boid in self.boids:
-            boids_array[0].append(boid.position[0])
-            boids_array[1].append(boid.position[1])
-            boids_array[2].append(boid.velocity[0])
-            boids_array[3].append(boid.velocity[1])
-        return boids_array
+            boids_tuple[0].append(boid.position[0])
+            boids_tuple[1].append(boid.position[1])
+            boids_tuple[2].append(boid.velocity[0])
+            boids_tuple[3].append(boid.velocity[1])
+        return boids_tuple
 
 def update_boids(boids):
 	xs,ys,xvs,yvs=boids
