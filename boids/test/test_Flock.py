@@ -12,10 +12,5 @@ number_of_boids = test_params["number_of_boids"]
 @patch("boids.boids.Boid")
 def test_init(mock_Boid):
     test_flock = Flock(number_of_boids, boid_limits)
-    assert_equal(len(test_flock.boids), number_of_boids)
-
-@patch("boids.boids.Boid")
-def test_boids_to_tuple(mock_Boid):
-    test_flock = Flock(number_of_boids, boid_limits)
-    test_tuple = test_flock.boids_to_tuple()
-    assert_equal(sum(len(x) for x in test_tuple), number_of_boids*4)
+    assert_equal(sum(len(x) for x in test_flock.positions), number_of_boids*2)
+    assert_equal(sum(len(x) for x in test_flock.velocities), number_of_boids*2)

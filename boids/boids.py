@@ -22,19 +22,14 @@ class Boid(object):
 
 class Flock(object):
     def __init__(self, number_of_boids, boid_limits):
-        self.boids = []
+        self.positions = ([], [])
+        self.velocities = ([], [])
         for x in range(number_of_boids):
             boid = Boid(boid_limits)
-            self.boids.append(boid)
-
-    def boids_to_tuple(self):
-        boids_tuple = boids = ([], [], [], [])
-        for boid in self.boids:
-            boids_tuple[0].append(boid.position[0])
-            boids_tuple[1].append(boid.position[1])
-            boids_tuple[2].append(boid.velocity[0])
-            boids_tuple[3].append(boid.velocity[1])
-        return boids_tuple
+            self.positions[0].append(boid.position[0])
+            self.positions[1].append(boid.position[1])
+            self.velocities[0].append(boid.velocity[0])
+            self.velocities[1].append(boid.velocity[1])
 
 def update_boids(boids):
 	xs,ys,xvs,yvs=boids
@@ -78,4 +73,4 @@ def simulate(params, boids, show=True):
 
 if __name__ == "__main__":
     flock = Flock(number_of_boids, boid_limits)
-    simulate(params, flock.boids_to_array())
+    simulate(params, flock.positions + flock.velocities)
