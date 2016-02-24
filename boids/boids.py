@@ -6,6 +6,7 @@ for use as an exercise on refactoring.
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import random
+import yaml
 
 # Deliberately terrible code for teaching purposes
 
@@ -15,11 +16,18 @@ min_x_velocity, max_x_velocity = 0, 10
 min_y_velocity, max_y_velocity = -20, 20
 number_of_boids = 50
 
-boids_x=[random.uniform(min_x_position,max_x_position) for x in range(number_of_boids)]
-boids_y=[random.uniform(min_y_position,max_y_position) for x in range(number_of_boids)]
-boid_x_velocities=[random.uniform(min_x_velocity,max_x_velocity) for x in range(number_of_boids)]
-boid_y_velocities=[random.uniform(min_y_velocity,max_y_velocity) for x in range(number_of_boids)]
-boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
+class Boid(object):
+    def __init__(self, min_x_position, max_x_position, min_y_position, max_y_position, min_x_velocity, max_x_velocity, min_y_velocity, max_y_velocity):
+		self.position = (random.uniform(min_x_position,max_x_position), random.uniform(min_y_position,max_y_position))
+		self.velocity = (random.uniform(min_x_velocity,max_x_velocity), random.uniform(min_y_velocity,max_y_velocity))
+
+boids = ([0]*number_of_boids, [0]*number_of_boids, [0]*number_of_boids, [0]*number_of_boids)
+for x in range(number_of_boids):
+	boid = Boid(min_x_position, max_x_position, min_y_position, max_y_position, min_x_velocity, max_x_velocity, min_y_velocity, max_y_velocity)
+	boids[0][x] = boid.position[0]
+	boids[1][x] = boid.position[1]
+	boids[2][x] = boid.velocity[0]
+	boids[2][x] = boid.velocity[1]
 
 def update_boids(boids):
 	xs,ys,xvs,yvs=boids
