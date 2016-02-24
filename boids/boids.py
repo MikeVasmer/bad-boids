@@ -28,7 +28,7 @@ for x in range(number_of_boids):
 	boids[0][x] = boid.position[0]
 	boids[1][x] = boid.position[1]
 	boids[2][x] = boid.velocity[0]
-	boids[2][x] = boid.velocity[1]
+	boids[3][x] = boid.velocity[1]
 
 def update_boids(boids):
 	xs,ys,xvs,yvs=boids
