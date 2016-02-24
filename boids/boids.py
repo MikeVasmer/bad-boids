@@ -10,12 +10,6 @@ import yaml
 
 # Deliberately terrible code for teaching purposes
 
-min_x_position, max_x_position = -450, 50
-min_y_position, max_y_position = 300, 600
-min_x_velocity, max_x_velocity = 0, 10
-min_y_velocity, max_y_velocity = -20, 20
-number_of_boids = 50
-
 params = yaml.load(open("fixtures/params.yaml"))
 number_of_boids = params["number_of_boids"]
 boid_limits = params["boid_limits"]
