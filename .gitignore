@@ -61,3 +61,6 @@ target/
 
 # PDFs
 *.pdf
+
+# Rough work file
+offcuts.py

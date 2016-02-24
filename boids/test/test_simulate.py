@@ -9,7 +9,7 @@ import os
 @patch("matplotlib.pyplot.axes")
 @patch("matplotlib.animation.FuncAnimation")
 def test_simulate(mock_FuncAnimation, mock_axes):
-    yaml.load(open(os.path.join(os.path.dirname(__file__),'fixtures/test_params.yaml'))
+    test_params = yaml.load(open(os.path.join(os.path.dirname(__file__),'fixtures/test_params.yaml')))
     boids = ([0], [0], [0], [0])
     simulate(test_params, boids, False)
     mock_axes.assert_called_with(
