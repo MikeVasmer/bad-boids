@@ -16,14 +16,18 @@ min_x_velocity, max_x_velocity = 0, 10
 min_y_velocity, max_y_velocity = -20, 20
 number_of_boids = 50
 
+params = yaml.load(open("fixtures/params.yaml"))
+number_of_boids = params["number_of_boids"]
+boid_limits = params["boid_limits"]
+
 class Boid(object):
-    def __init__(self, min_x_position, max_x_position, min_y_position, max_y_position, min_x_velocity, max_x_velocity, min_y_velocity, max_y_velocity):
-		self.position = (random.uniform(min_x_position,max_x_position), random.uniform(min_y_position,max_y_position))
-		self.velocity = (random.uniform(min_x_velocity,max_x_velocity), random.uniform(min_y_velocity,max_y_velocity))
+    def __init__(self, boid_limits, number_of_boids):
+		self.position = (random.uniform(boid_limits["min_x_position"],boid_limits["max_x_position"]), random.uniform(boid_limits["min_y_position"],boid_limits["max_y_position"]))
+		self.velocity = (random.uniform(boid_limits["min_x_velocity"],boid_limits["max_x_velocity"]), random.uniform(boid_limits["min_y_velocity"],boid_limits["max_y_velocity"]))
 
 boids = ([0]*number_of_boids, [0]*number_of_boids, [0]*number_of_boids, [0]*number_of_boids)
 for x in range(number_of_boids):
-	boid = Boid(min_x_position, max_x_position, min_y_position, max_y_position, min_x_velocity, max_x_velocity, min_y_velocity, max_y_velocity)
+	boid = Boid(boid_limits, number_of_boids)
 	boids[0][x] = boid.position[0]
 	boids[1][x] = boid.position[1]
 	boids[2][x] = boid.velocity[0]
@@ -32,7 +36,7 @@ for x in range(number_of_boids):
 def update_boids(boids):
 	xs,ys,xvs,yvs=boids
 	# Fly towards the middle
-	move_middle_strength = 0.01
+	move_middle_strength = params["move_middle_strength"]
 	for i in range(len(xs)):
 		for j in range(len(xs)):
 			xvs[i]=xvs[i]+(xs[j]-xs[i])*move_middle_strength/len(xs)
@@ -40,15 +44,15 @@ def update_boids(boids):
 		for j in range(len(xs)):
 			yvs[i]=yvs[i]+(ys[j]-ys[i])*move_middle_strength/len(xs)
 	# Fly away from nearby boids
-	min_separation_squared = 100
+	min_separation_squared = params["min_separation_squared"]
 	for i in range(len(xs)):
 		for j in range(len(xs)):
 			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < min_separation_squared:
 				xvs[i]=xvs[i]+(xs[i]-xs[j])
 				yvs[i]=yvs[i]+(ys[i]-ys[j])
 	# Try to match speed with nearby boids
-	nearby_distance_squared = 10000
-	matching_strength = 0.125
+	nearby_distance_squared = params["nearby_distance_squared"]
+	matching_strength = params["matching_strength"]
 	for i in range(len(xs)):
 		for j in range(len(xs)):
 			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < nearby_distance_squared:
