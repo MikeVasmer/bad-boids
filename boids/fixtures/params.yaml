@@ -12,3 +12,7 @@ move_middle_strength: 0.01
 min_separation_squared: 100
 nearby_distance_squared: 10000
 matching_strength: 0.125
+axes_min: -500
+axes_max: 1500
+number_of_frames: 50
+frame_delay: 50

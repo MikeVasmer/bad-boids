@@ -44,18 +44,16 @@ def update_boids(boids):
 		for j in range(len(xs)):
 			yvs[i]=yvs[i]+(ys[j]-ys[i])*move_middle_strength/len(xs)
 	# Fly away from nearby boids
-	min_separation_squared = params["min_separation_squared"]
 	for i in range(len(xs)):
 		for j in range(len(xs)):
-			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < min_separation_squared:
+			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["min_separation_squared"]:
 				xvs[i]=xvs[i]+(xs[i]-xs[j])
 				yvs[i]=yvs[i]+(ys[i]-ys[j])
 	# Try to match speed with nearby boids
-	nearby_distance_squared = params["nearby_distance_squared"]
 	matching_strength = params["matching_strength"]
 	for i in range(len(xs)):
 		for j in range(len(xs)):
-			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < nearby_distance_squared:
+			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["nearby_distance_squared"]:
 				xvs[i]=xvs[i]+(xvs[j]-xvs[i])*matching_strength/len(xs)
 				yvs[i]=yvs[i]+(yvs[j]-yvs[i])*matching_strength/len(xs)
 	# Move according to velocities
@@ -63,19 +61,17 @@ def update_boids(boids):
 		xs[i]=xs[i]+xvs[i]
 		ys[i]=ys[i]+yvs[i]
 
-axes_min, axes_max = -500, 1500
-number_of_frames, frame_delay = 50, 50
-
-def simulate(axes_min, axes_max, number_of_frames, frame_delay, boids, show=True):
+def simulate(params, boids, show=True):
+	axes_min, axes_max = params["axes_min"], params["axes_max"]
 	figure = plt.figure()
 	axes = plt.axes(xlim=(axes_min,axes_max), ylim=(axes_min,axes_max))
 	scatter = axes.scatter(boids[0],boids[1])
 	def animate(frame):
 	   update_boids(boids)
 	   scatter.set_offsets(zip(boids[0],boids[1]))
-	anim = animation.FuncAnimation(figure, animate, frames=number_of_frames, interval=frame_delay)
+	anim = animation.FuncAnimation(figure, animate, frames=params["number_of_frames"], interval=params["frame_delay"])
 	if show:
 		plt.show()
 
 if __name__ == "__main__":
-    simulate(axes_min,axes_max,number_of_frames,frame_delay,boids)
+    simulate(params,boids)
