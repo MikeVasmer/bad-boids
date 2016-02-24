@@ -8,27 +8,33 @@ from matplotlib import animation
 import random
 import yaml
 import os
-import inspect
 
-# Deliberately terrible code for teaching purposes
+#Load parameters from fixture file
 
-fixture_path = os.path.dirname(os.path.abspath(inspect.stack()[0][1])) + "/fixtures/params.yaml"
-params = yaml.load(open(fixture_path))
+params = yaml.load(open(os.path.join(os.path.dirname(__file__),'fixtures/params.yaml')))
 number_of_boids = params["number_of_boids"]
 boid_limits = params["boid_limits"]
 
 class Boid(object):
     def __init__(self, boid_limits):
-		self.position = (random.uniform(boid_limits["min_x_position"],boid_limits["max_x_position"]), random.uniform(boid_limits["min_y_position"],boid_limits["max_y_position"]))
-		self.velocity = (random.uniform(boid_limits["min_x_velocity"],boid_limits["max_x_velocity"]), random.uniform(boid_limits["min_y_velocity"],boid_limits["max_y_velocity"]))
+        self.position = (random.uniform(boid_limits["min_x_position"],boid_limits["max_x_position"]), random.uniform(boid_limits["min_y_position"],boid_limits["max_y_position"]))
+        self.velocity = (random.uniform(boid_limits["min_x_velocity"],boid_limits["max_x_velocity"]), random.uniform(boid_limits["min_y_velocity"],boid_limits["max_y_velocity"]))
 
-boids = ([0]*number_of_boids, [0]*number_of_boids, [0]*number_of_boids, [0]*number_of_boids)
-for x in range(number_of_boids):
-	boid = Boid(boid_limits)
-	boids[0][x] = boid.position[0]
-	boids[1][x] = boid.position[1]
-	boids[2][x] = boid.velocity[0]
-	boids[3][x] = boid.velocity[1]
+class Flock(object):
+    def __init__(self, number_of_boids, boid_limits):
+        self.boids = []
+        for x in range(number_of_boids):
+            boid = Boid(boid_limits)
+            self.boids.append(boid)
+
+    def boids_to_array(self):
+        boids_array = boids = ([], [], [], [])
+        for boid in self.boids:
+            boids_array[0].append(boid.position[0])
+            boids_array[1].append(boid.position[1])
+            boids_array[2].append(boid.velocity[0])
+            boids_array[3].append(boid.velocity[1])
+        return boids_array
 
 def update_boids(boids):
 	xs,ys,xvs,yvs=boids
@@ -71,4 +77,5 @@ def simulate(params, boids, show=True):
 		plt.show()
 
 if __name__ == "__main__":
-    simulate(params,boids)
+    flock = Flock(number_of_boids, boid_limits)
+    simulate(params, flock.boids_to_array())
