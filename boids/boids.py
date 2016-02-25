@@ -22,8 +22,8 @@ class Boid(object):
 
 class Flock(object):
     def __init__(self, number_of_boids, boid_limits):
-        self.positions = ([], [])
-        self.velocities = ([], [])
+        self.positions = [[], []]
+        self.velocities = [[], []]
         for x in range(number_of_boids):
             boid = Boid(boid_limits)
             self.positions[0].append(boid.position[0])
@@ -31,46 +31,46 @@ class Flock(object):
             self.velocities[0].append(boid.velocity[0])
             self.velocities[1].append(boid.velocity[1])
 
-def update_boids(boids):
-	xs,ys,xvs,yvs=boids
-	# Fly towards the middle
-	move_middle_strength = params["move_middle_strength"]
-	for i in range(len(xs)):
-		for j in range(len(xs)):
-			xvs[i]=xvs[i]+(xs[j]-xs[i])*move_middle_strength/len(xs)
-	for i in range(len(xs)):
-		for j in range(len(xs)):
-			yvs[i]=yvs[i]+(ys[j]-ys[i])*move_middle_strength/len(xs)
-	# Fly away from nearby boids
-	for i in range(len(xs)):
-		for j in range(len(xs)):
-			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["min_separation_squared"]:
-				xvs[i]=xvs[i]+(xs[i]-xs[j])
-				yvs[i]=yvs[i]+(ys[i]-ys[j])
-	# Try to match speed with nearby boids
-	matching_strength = params["matching_strength"]
-	for i in range(len(xs)):
-		for j in range(len(xs)):
-			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["nearby_distance_squared"]:
-				xvs[i]=xvs[i]+(xvs[j]-xvs[i])*matching_strength/len(xs)
-				yvs[i]=yvs[i]+(yvs[j]-yvs[i])*matching_strength/len(xs)
-	# Move according to velocities
-	for i in range(len(xs)):
-		xs[i]=xs[i]+xvs[i]
-		ys[i]=ys[i]+yvs[i]
+    def update_boids(self):
+    	xs,ys,xvs,yvs = self.positions + self.velocities
+    	# Fly towards the middle
+    	move_middle_strength = params["move_middle_strength"]
+    	for i in range(len(xs)):
+    		for j in range(len(xs)):
+    			xvs[i]=xvs[i]+(xs[j]-xs[i])*move_middle_strength/len(xs)
+    	for i in range(len(xs)):
+    		for j in range(len(xs)):
+    			yvs[i]=yvs[i]+(ys[j]-ys[i])*move_middle_strength/len(xs)
+    	# Fly away from nearby boids
+    	for i in range(len(xs)):
+    		for j in range(len(xs)):
+    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["min_separation_squared"]:
+    				xvs[i]=xvs[i]+(xs[i]-xs[j])
+    				yvs[i]=yvs[i]+(ys[i]-ys[j])
+    	# Try to match speed with nearby boids
+    	matching_strength = params["matching_strength"]
+    	for i in range(len(xs)):
+    		for j in range(len(xs)):
+    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["nearby_distance_squared"]:
+    				xvs[i]=xvs[i]+(xvs[j]-xvs[i])*matching_strength/len(xs)
+    				yvs[i]=yvs[i]+(yvs[j]-yvs[i])*matching_strength/len(xs)
+    	# Move according to velocities
+    	for i in range(len(xs)):
+    		xs[i]=xs[i]+xvs[i]
+    		ys[i]=ys[i]+yvs[i]
 
-def simulate(params, boids, show=True):
+def simulate(params, flock, show=True):
 	axes_min, axes_max = params["axes_min"], params["axes_max"]
 	figure = plt.figure()
 	axes = plt.axes(xlim=(axes_min,axes_max), ylim=(axes_min,axes_max))
-	scatter = axes.scatter(boids[0],boids[1])
+	scatter = axes.scatter(flock.positions[0], flock.positions[1])
 	def animate(frame):
-	   update_boids(boids)
-	   scatter.set_offsets(zip(boids[0],boids[1]))
+	   flock.update_boids()
+	   scatter.set_offsets(zip(flock.positions[0], flock.positions[1]))
 	anim = animation.FuncAnimation(figure, animate, frames=params["number_of_frames"], interval=params["frame_delay"])
 	if show:
 		plt.show()
 
 if __name__ == "__main__":
     flock = Flock(number_of_boids, boid_limits)
-    simulate(params, flock.positions + flock.velocities)
+    simulate(params, flock)

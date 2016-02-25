@@ -1,14 +1,18 @@
-number_of_frames: 40
-frame_delay: 55
-axes_min: -600
-axes_max: 1600
 boid_limits:
-    min_x_position: -480
-    max_x_position: 20
-    min_y_position: 400
-    max_y_position: 100
-    min_x_velocity: 4
-    max_x_velocity: 50
-    min_y_velocity: -10
-    max_y_velocity: 2
-number_of_boids: 47
+    min_x_position: -450
+    max_x_position: 50
+    min_y_position: 300
+    max_y_position: 600
+    min_x_velocity: 0
+    max_x_velocity: 10
+    min_y_velocity: -20
+    max_y_velocity: 20
+number_of_boids: 50
+move_middle_strength: 0.01
+min_separation_squared: 100
+nearby_distance_squared: 10000
+matching_strength: 0.125
+axes_min: -500
+axes_max: 1500
+number_of_frames: 50
+frame_delay: 50
