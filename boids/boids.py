@@ -31,9 +31,9 @@ class Flock(object):
             self.velocities[0].append(boid.velocity[0])
             self.velocities[1].append(boid.velocity[1])
 
-    def update_boids(self):
-    	xs,ys,xvs,yvs = self.positions + self.velocities
-    	# Fly towards the middle
+    def move_to_middle(self):
+        xs,ys,xvs,yvs = self.positions + self.velocities
+        # Fly towards the middle
     	move_middle_strength = params["move_middle_strength"]
     	for i in range(len(xs)):
     		for j in range(len(xs)):
@@ -41,19 +41,31 @@ class Flock(object):
     	for i in range(len(xs)):
     		for j in range(len(xs)):
     			yvs[i]=yvs[i]+(ys[j]-ys[i])*move_middle_strength/len(xs)
-    	# Fly away from nearby boids
+
+    def fly_away_nearby(self):
+        xs,ys,xvs,yvs = self.positions + self.velocities
+        # Fly away from nearby boids
     	for i in range(len(xs)):
     		for j in range(len(xs)):
     			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["min_separation_squared"]:
     				xvs[i]=xvs[i]+(xs[i]-xs[j])
     				yvs[i]=yvs[i]+(ys[i]-ys[j])
-    	# Try to match speed with nearby boids
+
+    def match_boids_speed(self):
+        xs,ys,xvs,yvs = self.positions + self.velocities
+        # Try to match speed with nearby boids
     	matching_strength = params["matching_strength"]
     	for i in range(len(xs)):
     		for j in range(len(xs)):
     			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["nearby_distance_squared"]:
     				xvs[i]=xvs[i]+(xvs[j]-xvs[i])*matching_strength/len(xs)
     				yvs[i]=yvs[i]+(yvs[j]-yvs[i])*matching_strength/len(xs)
+
+    def update_boids(self):
+    	xs,ys,xvs,yvs = self.positions + self.velocities
+        self.move_to_middle()
+        self.fly_away_nearby()
+        self.match_boids_speed()
     	# Move according to velocities
     	for i in range(len(xs)):
     		xs[i]=xs[i]+xvs[i]
