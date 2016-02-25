@@ -1,4 +1,4 @@
-boid_limits:
+boid_params:
     min_x_position: -450
     max_x_position: 50
     min_y_position: 300
@@ -7,12 +7,14 @@ boid_limits:
     max_x_velocity: 10
     min_y_velocity: -20
     max_y_velocity: 20
-number_of_boids: 50
-move_middle_strength: 0.01
-min_separation_squared: 100
-nearby_distance_squared: 10000
-matching_strength: 0.125
-axes_min: -500
-axes_max: 1500
-number_of_frames: 50
-frame_delay: 50
+flock_params:
+    number_of_boids: 50
+    move_middle_strength: 0.01
+    min_separation_squared: 100
+    nearby_distance_squared: 10000
+    matching_strength: 0.125
+anim_params:
+    axes_min: -500
+    axes_max: 1500
+    number_of_frames: 50
+    frame_delay: 50

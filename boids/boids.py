@@ -9,23 +9,19 @@ import random
 import yaml
 import os
 
-#Load parameters from fixture file
-
-params = yaml.load(open(os.path.join(os.path.dirname(__file__),'fixtures/params.yaml')))
-number_of_boids = params["number_of_boids"]
-boid_limits = params["boid_limits"]
-
 class Boid(object):
-    def __init__(self, boid_limits):
-        self.position = (random.uniform(boid_limits["min_x_position"],boid_limits["max_x_position"]), random.uniform(boid_limits["min_y_position"],boid_limits["max_y_position"]))
-        self.velocity = (random.uniform(boid_limits["min_x_velocity"],boid_limits["max_x_velocity"]), random.uniform(boid_limits["min_y_velocity"],boid_limits["max_y_velocity"]))
+    def __init__(self, boid_params):
+        self.position = (random.uniform(boid_params["min_x_position"],boid_params["max_x_position"]), random.uniform(boid_params["min_y_position"],boid_params["max_y_position"]))
+        self.velocity = (random.uniform(boid_params["min_x_velocity"],boid_params["max_x_velocity"]), random.uniform(boid_params["min_y_velocity"],boid_params["max_y_velocity"]))
 
 class Flock(object):
-    def __init__(self, number_of_boids, boid_limits):
+    def __init__(self, flock_params, boid_params):
         self.positions = [[], []]
         self.velocities = [[], []]
-        for x in range(number_of_boids):
-            boid = Boid(boid_limits)
+        self.boid_params = boid_params
+        self.flock_params = flock_params
+        for x in range(flock_params["number_of_boids"]):
+            boid = Boid(boid_params)
             self.positions[0].append(boid.position[0])
             self.positions[1].append(boid.position[1])
             self.velocities[0].append(boid.velocity[0])
@@ -34,7 +30,7 @@ class Flock(object):
     def move_to_middle(self):
         xs,ys,xvs,yvs = self.positions + self.velocities
         # Fly towards the middle
-    	move_middle_strength = params["move_middle_strength"]
+    	move_middle_strength = self.flock_params["move_middle_strength"]
     	for i in range(len(xs)):
     		for j in range(len(xs)):
     			xvs[i]=xvs[i]+(xs[j]-xs[i])*move_middle_strength/len(xs)
@@ -47,17 +43,17 @@ class Flock(object):
         # Fly away from nearby boids
     	for i in range(len(xs)):
     		for j in range(len(xs)):
-    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["min_separation_squared"]:
+    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < self.flock_params["min_separation_squared"]:
     				xvs[i]=xvs[i]+(xs[i]-xs[j])
     				yvs[i]=yvs[i]+(ys[i]-ys[j])
 
     def match_boids_speed(self):
         xs,ys,xvs,yvs = self.positions + self.velocities
         # Try to match speed with nearby boids
-    	matching_strength = params["matching_strength"]
+    	matching_strength = self.flock_params["matching_strength"]
     	for i in range(len(xs)):
     		for j in range(len(xs)):
-    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < params["nearby_distance_squared"]:
+    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < self.flock_params["nearby_distance_squared"]:
     				xvs[i]=xvs[i]+(xvs[j]-xvs[i])*matching_strength/len(xs)
     				yvs[i]=yvs[i]+(yvs[j]-yvs[i])*matching_strength/len(xs)
 
@@ -84,5 +80,11 @@ def simulate(params, flock, show=True):
 		plt.show()
 
 if __name__ == "__main__":
-    flock = Flock(number_of_boids, boid_limits)
-    simulate(params, flock)
+    #Load parameters from fixture file
+    params = yaml.load(open(os.path.join(os.path.dirname(__file__),'fixtures/params.yaml')))
+    flock_params = params["flock_params"]
+    boid_params = params["boid_params"]
+    anim_params = params["anim_params"]
+
+    flock = Flock(flock_params, boid_params)
+    simulate(anim_params, flock)

@@ -16,8 +16,8 @@ def test_bad_boids_regression():
                 os.path.dirname(__file__),
                 'fixtures/test_params.yaml')))
     test_flock = Flock(
-        test_params["number_of_boids"],
-        test_params["boid_limits"])
+        test_params["flock_params"],
+        test_params["boid_params"])
     test_flock.positions[0] = regression_data["before"][0]
     test_flock.positions[1] = regression_data["before"][1]
     test_flock.velocities[0] = regression_data["before"][2]
