@@ -36,38 +36,33 @@ class Flock(object):
         direction_to_middle = self.positions - middle[:,np.newaxis]
         self.velocities -= direction_to_middle * move_middle_strength
 
-    def fly_away_nearby(self):
+    def fly_away_nearby(self, separations, square_distances):
         # Fly away from nearby boids
-        separations = self.positions[:,np.newaxis,:] - self.positions[:,:,np.newaxis]
-        squared_displacements = separations * separations
-        square_distances = np.sum(squared_displacements, 0)
         far_away = square_distances > self.flock_params["min_separation_squared"]
         separations_if_close = np.copy(separations)
         separations_if_close[0,:,:][far_away] = 0
         separations_if_close[1,:,:][far_away] = 0
         self.velocities += np.sum(separations_if_close,1)
 
-    def match_boids_speed(self):
-        xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
-        # Try to match speed with nearby boids
-    	matching_strength = self.flock_params["matching_strength"]
-    	for i in range(len(xs)):
-    		for j in range(len(xs)):
-    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < self.flock_params["nearby_distance_squared"]:
-    				xvs[i]=xvs[i]+(xvs[j]-xvs[i])*matching_strength/len(xs)
-    				yvs[i]=yvs[i]+(yvs[j]-yvs[i])*matching_strength/len(xs)
+    def match_boids_speed(self, square_distances):
+        # Match speed with nearby boids
+        matching_strength = self.flock_params["matching_strength"]
+        velocity_differences = self.velocities[:,np.newaxis,:] - self.velocities[:,:,np.newaxis]
+        very_far = square_distances > self.flock_params["nearby_distance_squared"]
+        velocity_differences_if_close = np.copy(velocity_differences)
+        velocity_differences_if_close[0,:,:][very_far] =0
+        velocity_differences_if_close[1,:,:][very_far] =0
+        self.velocities -= np.mean(velocity_differences_if_close, 1) * self.flock_params["matching_strength"]
 
     def update_boids(self):
-        #print self.positions
-    	xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
+        separations = self.positions[:,np.newaxis,:] - self.positions[:,:,np.newaxis]
+        squared_displacements = separations * separations
+        square_distances = np.sum(squared_displacements, 0)
         self.move_to_middle()
-        self.fly_away_nearby()
-        self.match_boids_speed()
+        self.fly_away_nearby(separations, square_distances)
+        self.match_boids_speed(square_distances)
     	# Move according to velocities
-    	for i in range(len(xs)):
-    		xs[i]=xs[i]+xvs[i]
-    		ys[i]=ys[i]+yvs[i]
-        #print self.positions
+    	self.positions += self.velocities
 
 def simulate(params, flock, show=True):
 	axes_min, axes_max = params["axes_min"], params["axes_max"]

@@ -46,5 +46,8 @@ def test_fly_away_nearby():
     test_flock.positions[1] = test_data["before"][0][1]
     test_flock.velocities[0] = test_data["before"][1][0]
     test_flock.velocities[1] = test_data["before"][1][1]
-    test_flock.fly_away_nearby()
+    separations = test_flock.positions[:,np.newaxis,:] - test_flock.positions[:,:,np.newaxis]
+    squared_displacements = separations * separations
+    square_distances = np.sum(squared_displacements, 0)
+    test_flock.fly_away_nearby(separations, square_distances)
     np.testing.assert_allclose(test_data["after"], [test_flock.positions.tolist(), test_flock.velocities.tolist()])

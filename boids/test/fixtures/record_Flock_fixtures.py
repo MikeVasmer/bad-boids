@@ -35,4 +35,4 @@ def record_fly_away_fixture():
 
 if __name__ == "__main__":
     #record_move_middle_fixture()
-    record_fly_away_fixture()
+    #record_fly_away_fixture()
