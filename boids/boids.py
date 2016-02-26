@@ -30,20 +30,22 @@ class Flock(object):
             self.velocities[1][x] = boid.velocity[1]
 
     def move_to_middle(self):
-        #Preferentially set boids to fly towards the middle of the flock
+        # Preferentially set boids to fly towards the middle of the flock
         move_middle_strength = self.flock_params["move_middle_strength"]
         middle = np.mean(self.positions, 1)
         direction_to_middle = self.positions - middle[:,np.newaxis]
         self.velocities -= direction_to_middle * move_middle_strength
 
     def fly_away_nearby(self):
-        xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
         # Fly away from nearby boids
-    	for i in range(len(xs)):
-    		for j in range(len(xs)):
-    			if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < self.flock_params["min_separation_squared"]:
-    				xvs[i]=xvs[i]+(xs[i]-xs[j])
-    				yvs[i]=yvs[i]+(ys[i]-ys[j])
+        separations = self.positions[:,np.newaxis,:] - self.positions[:,:,np.newaxis]
+        squared_displacements = separations * separations
+        square_distances = np.sum(squared_displacements, 0)
+        far_away = square_distances > self.flock_params["min_separation_squared"]
+        separations_if_close = np.copy(separations)
+        separations_if_close[0,:,:][far_away] = 0
+        separations_if_close[1,:,:][far_away] = 0
+        self.velocities += np.sum(separations_if_close,1)
 
     def match_boids_speed(self):
         xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
