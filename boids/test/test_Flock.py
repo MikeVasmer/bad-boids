@@ -34,7 +34,7 @@ def test_move_to_middle():
     test_flock.velocities[0] = test_data["before"][1][0]
     test_flock.velocities[1] = test_data["before"][1][1]
     test_flock.move_to_middle()
-    np.testing.assert_allclose(test_data["after"], [test_flock.positions.tolist(), test_flock.velocities.tolist()])
+    np.testing.assert_allclose(test_data["after"][1], test_flock.velocities.tolist())
 
 def test_fly_away_nearby():
     test_data = yaml.load(
@@ -50,4 +50,4 @@ def test_fly_away_nearby():
     squared_displacements = separations * separations
     square_distances = np.sum(squared_displacements, 0)
     test_flock.fly_away_nearby(separations, square_distances)
-    np.testing.assert_allclose(test_data["after"], [test_flock.positions.tolist(), test_flock.velocities.tolist()])
+    np.testing.assert_allclose(test_data["after"][1], test_flock.velocities.tolist())
