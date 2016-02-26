@@ -18,4 +18,5 @@ anim_params:
     axes_max: 1500
     number_of_frames: 50
     frame_delay: 50
-delta: 0.01    
+delta: 0.01
+test_iterations: 50    
