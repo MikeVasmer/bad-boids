@@ -2,6 +2,7 @@ from boids.boids import simulate, Flock
 from nose.tools import assert_almost_equal
 import os
 import yaml
+import numpy as np
 
 
 def test_bad_boids_regression():
@@ -24,6 +25,6 @@ def test_bad_boids_regression():
     test_flock.velocities[1] = regression_data["before"][3]
     test_flock.update_boids()
     for after, before in zip(
-            regression_data["after"], test_flock.positions + test_flock.velocities):
+            regression_data["after"], np.concatenate((test_flock.positions,  test_flock.velocities), axis=1)):
         for after_value, before_value in zip(after, before):
             assert_almost_equal(after_value, before_value, delta=0.01)

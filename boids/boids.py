@@ -8,6 +8,7 @@ from matplotlib import animation
 import random
 import yaml
 import os
+import numpy as np
 
 class Boid(object):
     def __init__(self, boid_params):
@@ -16,19 +17,20 @@ class Boid(object):
 
 class Flock(object):
     def __init__(self, flock_params, boid_params):
-        self.positions = [[], []]
-        self.velocities = [[], []]
         self.boid_params = boid_params
         self.flock_params = flock_params
-        for x in range(flock_params["number_of_boids"]):
+        self.number_of_boids = flock_params["number_of_boids"]
+        self.positions = np.zeros((2, self.number_of_boids))
+        self.velocities = np.zeros((2, self.number_of_boids))
+        for x in range(self.number_of_boids):
             boid = Boid(boid_params)
-            self.positions[0].append(boid.position[0])
-            self.positions[1].append(boid.position[1])
-            self.velocities[0].append(boid.velocity[0])
-            self.velocities[1].append(boid.velocity[1])
+            self.positions[0][x] = boid.position[0]
+            self.positions[1][x] = boid.position[1]
+            self.velocities[0][x] = boid.velocity[0]
+            self.velocities[1][x] = boid.velocity[1]
 
     def move_to_middle(self):
-        xs,ys,xvs,yvs = self.positions + self.velocities
+        xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
         # Fly towards the middle
     	move_middle_strength = self.flock_params["move_middle_strength"]
     	for i in range(len(xs)):
@@ -39,7 +41,7 @@ class Flock(object):
     			yvs[i]=yvs[i]+(ys[j]-ys[i])*move_middle_strength/len(xs)
 
     def fly_away_nearby(self):
-        xs,ys,xvs,yvs = self.positions + self.velocities
+        xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
         # Fly away from nearby boids
     	for i in range(len(xs)):
     		for j in range(len(xs)):
@@ -48,7 +50,7 @@ class Flock(object):
     				yvs[i]=yvs[i]+(ys[i]-ys[j])
 
     def match_boids_speed(self):
-        xs,ys,xvs,yvs = self.positions + self.velocities
+        xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
         # Try to match speed with nearby boids
     	matching_strength = self.flock_params["matching_strength"]
     	for i in range(len(xs)):
@@ -58,7 +60,8 @@ class Flock(object):
     				yvs[i]=yvs[i]+(yvs[j]-yvs[i])*matching_strength/len(xs)
 
     def update_boids(self):
-    	xs,ys,xvs,yvs = self.positions + self.velocities
+        #print self.positions
+    	xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
         self.move_to_middle()
         self.fly_away_nearby()
         self.match_boids_speed()
@@ -66,6 +69,7 @@ class Flock(object):
     	for i in range(len(xs)):
     		xs[i]=xs[i]+xvs[i]
     		ys[i]=ys[i]+yvs[i]
+        #print self.positions
 
 def simulate(params, flock, show=True):
 	axes_min, axes_max = params["axes_min"], params["axes_max"]
