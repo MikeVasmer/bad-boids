@@ -30,6 +30,7 @@ class Flock(object):
             self.velocities[1][x] = boid.velocity[1]
 
     def move_to_middle(self):
+        #Preferentially set boids to fly towards the middle of the flock
         move_middle_strength = self.flock_params["move_middle_strength"]
         middle = np.mean(self.positions, 1)
         direction_to_middle = self.positions - middle[:,np.newaxis]
