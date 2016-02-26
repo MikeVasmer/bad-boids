@@ -30,15 +30,10 @@ class Flock(object):
             self.velocities[1][x] = boid.velocity[1]
 
     def move_to_middle(self):
-        xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
-        # Fly towards the middle
-    	move_middle_strength = self.flock_params["move_middle_strength"]
-    	for i in range(len(xs)):
-    		for j in range(len(xs)):
-    			xvs[i]=xvs[i]+(xs[j]-xs[i])*move_middle_strength/len(xs)
-    	for i in range(len(xs)):
-    		for j in range(len(xs)):
-    			yvs[i]=yvs[i]+(ys[j]-ys[i])*move_middle_strength/len(xs)
+        move_middle_strength = self.flock_params["move_middle_strength"]
+        middle = np.mean(self.positions, 1)
+        direction_to_middle = self.positions - middle[:,np.newaxis]
+        self.velocities -= direction_to_middle * move_middle_strength
 
     def fly_away_nearby(self):
         xs,ys,xvs,yvs = self.positions[0], self.positions[1], self.velocities[0], self.velocities[1]
