@@ -20,7 +20,7 @@ def process():
             open(
                 os.path.join(
                     os.path.dirname(__file__),
-                    'fixtures/params.yaml')))
+                    'params.yaml')))
         with open('example_config.yaml', "w") as f:
             f.write(yaml.dump(params))
 
