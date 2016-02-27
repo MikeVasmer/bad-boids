@@ -6,7 +6,7 @@ setup(
     packages=find_packages(exclude=["*test"]),
     scripts=["scripts/boids"],
     install_requires=["matplotlib", "numpy", "yaml"],
-    package_data={"boids": ["params.yaml"]}
+    package_data={"boids": ["params.yaml"]},
 
     # metadata
     author="Michael Vasmer",
