@@ -22,17 +22,3 @@ def simulate(params, flock, show=True):
         interval=params["frame_delay"])
     if show:
         plt.show()
-
-if __name__ == "__main__":
-    # Load parameters from fixture file
-    params = yaml.load(
-        open(
-            os.path.join(
-                os.path.dirname(__file__),
-                'fixtures/params.yaml')))
-    flock_params = params["flock_params"]
-    boid_params = params["boid_params"]
-    anim_params = params["anim_params"]
-
-    flock = Flock(flock_params, boid_params)
-    simulate(anim_params, flock)
