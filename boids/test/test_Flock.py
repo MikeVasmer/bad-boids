@@ -65,3 +65,17 @@ def test_match_boids_speeds():
     square_distances = np.sum(separations * separations, 0)
     test_flock.match_boids_speed(square_distances)
     np.testing.assert_allclose(test_data["after"][1], test_flock.velocities.tolist())
+
+def test_update_boids():
+    test_data = yaml.load(
+        open(
+            os.path.join(
+                os.path.dirname(__file__),
+                'fixtures/update_boids_fixture.yaml')))
+    test_flock.positions[0] = test_data["before"][0][0]
+    test_flock.positions[1] = test_data["before"][0][1]
+    test_flock.velocities[0] = test_data["before"][1][0]
+    test_flock.velocities[1] = test_data["before"][1][1]
+    test_flock.update_boids()
+    np.testing.assert_allclose(test_data["after"][0], test_flock.positions.tolist())
+    np.testing.assert_allclose(test_data["after"][1], test_flock.velocities.tolist())

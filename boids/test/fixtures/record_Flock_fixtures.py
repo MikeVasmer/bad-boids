@@ -47,7 +47,18 @@ def record_match_fixture():
         'match_fixture.yaml'), "w") as f:
         f.write(yaml.dump(fixture))
 
+def record_update_boids_fixture():
+    before = deepcopy([test_flock.positions.tolist(), test_flock.velocities.tolist()])
+    test_flock.update_boids()
+    after = [test_flock.positions.tolist(), test_flock.velocities.tolist()]
+    fixture = {"before" : before, "after" : after}
+    with open(os.path.join(
+        os.path.dirname(__file__),
+        'update_boids_fixture.yaml'), "w") as f:
+        f.write(yaml.dump(fixture))
+
 if __name__ == "__main__":
     #record_move_middle_fixture()
     #record_fly_away_fixture()
-    record_match_fixture()
+    #record_match_fixture()
+    record_update_boids_fixture()
