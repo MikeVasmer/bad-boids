@@ -1,5 +1,5 @@
 from nose.tools import assert_equal, assert_almost_equal
-from boids.boids import Flock
+from boids.model import Flock
 import yaml
 import os
 from mock import patch
@@ -17,7 +17,7 @@ test_flock = Flock(flock_params, boid_limits)
 # Mock Boid so that errors in the Boid class don't cause this test to fail
 
 
-@patch("boids.boids.Boid")
+@patch("boids.model.Boid")
 def test_init(mock_Boid):
     assert_equal(sum(len(x)
                      for x in test_flock.positions), flock_params["number_of_boids"] * 2)

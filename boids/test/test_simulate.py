@@ -1,4 +1,4 @@
-from boids.boids import simulate, Flock
+from boids.simulate import simulate
 from matplotlib import pyplot as plt
 from matplotlib import animation
 from mock import patch
@@ -7,7 +7,7 @@ import yaml
 import os
 
 
-@patch("boids.boids.Flock")
+@patch("boids.model.Flock")
 @patch("matplotlib.pyplot.axes")
 @patch("matplotlib.animation.FuncAnimation")
 def test_simulate(mock_FuncAnimation, mock_axes, mock_Flock):

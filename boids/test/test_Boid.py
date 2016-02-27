@@ -1,4 +1,4 @@
-from boids.boids import Boid
+from boids.model import Boid
 import yaml
 import os
 from nose.tools import assert_true
