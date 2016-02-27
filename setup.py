@@ -5,7 +5,7 @@ setup(
     version="1.0.0",
     packages=find_packages(exclude=["*test"]),
     scripts=["scripts/boids"],
-    install_requires=["matplotlib", "numpy", "yaml"],
+    install_requires=["matplotlib", "numpy", "pyyaml"],
     package_data={"boids": ["params.yaml"]},
 
     # metadata
