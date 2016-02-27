@@ -73,5 +73,5 @@ class Flock(object):
         self.move_to_middle()
         self.fly_away_nearby(separations, square_distances)
         self.match_boids_speed(square_distances)
-        # Move according to velocities
+        # Move according to updated velocities
         self.positions += self.velocities

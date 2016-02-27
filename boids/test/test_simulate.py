@@ -17,6 +17,7 @@ def test_simulate(mock_FuncAnimation, mock_axes, mock_Flock):
                 os.path.dirname(__file__),
                 'fixtures/test_params.yaml')))["anim_params"]
     simulate(test_params, mock_Flock, False)
+    #Check mocks called with correct parameters
     mock_axes.assert_called_with(
         xlim=(
             test_params["axes_min"], test_params["axes_max"]), ylim=(

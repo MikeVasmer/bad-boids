@@ -1,0 +1,5 @@
+anim_params: {axes_max: 1500, axes_min: -500, frame_delay: 50, number_of_frames: 50}
+boid_params: {max_x_position: 50, max_x_velocity: 10, max_y_position: 600, max_y_velocity: 20,
+  min_x_position: -450, min_x_velocity: 0, min_y_position: 300, min_y_velocity: -20}
+flock_params: {matching_strength: 0.125, min_separation_squared: 100, move_middle_strength: 0.01,
+  nearby_distance_squared: 10000, number_of_boids: 50}
